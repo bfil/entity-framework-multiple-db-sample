@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Model.Store" Alias="Self" Provider="Devart.Data.Oracle" ProviderManifestToken="ORA" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+  <EntityContainer Name="ModelStoreContainer">
+    <EntitySet Name="Autori" EntityType="Model.Store.Autori" store:Type="Tables" Schema="EFTest" />
+    <EntitySet Name="Libri" EntityType="Model.Store.Libri" store:Type="Tables" Schema="EFTest" />
+    <AssociationSet Name="AutoreLibro" Association="Model.Store.AutoreLibro">
+      <End Role="Autore" EntitySet="Autori" />
+      <End Role="Libro" EntitySet="Libri" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Autori">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Nome" Type="VARCHAR2" Nullable="true" />
+    <Property Name="Età" Type="int16" Nullable="true" />
+    <Property Name="InPensione" Type="bool" Nullable="true" />
+  </EntityType>
+  <EntityType Name="Libri">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Titolo" Type="VARCHAR2" Nullable="true" />
+    <Property Name="DataDiPubblicazione" Type="TIMESTAMP" Nullable="true" />
+    <Property Name="Prezzo" Type="decimal" Nullable="true" />
+    <Property Name="Autore_ID" Type="int" Nullable="false" />
+  </EntityType>
+  <Association Name="AutoreLibro">
+    <End Role="Autore" Type="Model.Store.Autori" Multiplicity="1">
+      <OnDelete Action="Cascade" />
+    </End>
+    <End Role="Libro" Type="Model.Store.Libri" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Autore">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Libro">
+        <PropertyRef Name="Autore_ID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Model" Alias="Self" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="EFTestEntities">
+          <EntitySet Name="Autori" EntityType="Model.Autore" />
+          <EntitySet Name="Libri" EntityType="Model.Libro" />
+          <AssociationSet Name="AutoreLibro" Association="Model.AutoreLibro">
+            <End Role="Autore" EntitySet="Autori" />
+            <End Role="Libro" EntitySet="Libri" /></AssociationSet></EntityContainer>
+        <EntityType Name="Autore">
+          <Key>
+            <PropertyRef Name="ID" /></Key>
+          <Property Name="ID" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="Nome" Type="String" Nullable="true" />
+          <Property Name="Età" Type="Int16" Nullable="true" />
+          <Property Name="InPensione" Type="Boolean" Nullable="true" />
+          <NavigationProperty Name="Libro" Relationship="Model.AutoreLibro" FromRole="Autore" ToRole="Libro" /></EntityType>
+        <EntityType Name="Libro">
+          <Key>
+            <PropertyRef Name="ID" /></Key>
+          <Property Name="ID" Type="Int32" Nullable="false" a:StoreGeneratedPattern="Identity" xmlns:a="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
+          <Property Name="Titolo" Type="String" Nullable="true" />
+          <Property Name="DataDiPubblicazione" Type="DateTime" Nullable="true" />
+          <Property Name="Prezzo" Type="Decimal" Nullable="true" />
+          <NavigationProperty Name="Autore" Relationship="Model.AutoreLibro" FromRole="Libro" ToRole="Autore" /></EntityType>
+        <Association Name="AutoreLibro">
+          <End Type="Model.Autore" Role="Autore" Multiplicity="1" >
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Type="Model.Libro" Role="Libro" Multiplicity="*" >
+          </End></Association></Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="ModelStoreContainer" CdmEntityContainer="EFTestEntities">
+    <EntitySetMapping Name="Autori">
+      <EntityTypeMapping TypeName="IsTypeOf(Model.Autore)">
+        <MappingFragment StoreEntitySet="Autori">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Nome" ColumnName="Nome" />
+          <ScalarProperty Name="Età" ColumnName="Età" />
+          <ScalarProperty Name="InPensione" ColumnName="InPensione" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Libri">
+      <EntityTypeMapping TypeName="IsTypeOf(Model.Libro)">
+        <MappingFragment StoreEntitySet="Libri">
+          <ScalarProperty Name="ID" ColumnName="ID" />
+          <ScalarProperty Name="Titolo" ColumnName="Titolo" />
+          <ScalarProperty Name="DataDiPubblicazione" ColumnName="DataDiPubblicazione" />
+          <ScalarProperty Name="Prezzo" ColumnName="Prezzo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <AssociationSetMapping Name="AutoreLibro" TypeName="Model.AutoreLibro" StoreEntitySet="Libri">
+      <EndProperty Name="Autore">
+        <ScalarProperty Name="ID" ColumnName="Autore_ID" />
+      </EndProperty>
+      <EndProperty Name="Libro">
+        <ScalarProperty Name="ID" ColumnName="ID" />
+      </EndProperty>
+    </AssociationSetMapping>
+  </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer>
+    <edmx:Connection>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Connection>
+    <edmx:Options>
+      <edmx:DesignerInfoPropertySet>
+        <edmx:DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <edmx:DesignerProperty Name="DefaultDatabaseSchema" Value="EFTest" />
+        <edmx:DesignerProperty Name="DDLGenerationTemplate" Value="$(VSEFTools)\DBGen\Devart SSDLToOracle.tt" />
+      </edmx:DesignerInfoPropertySet>
+    </edmx:Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <edmx:Diagram Name="Model">
+        <edmx:EntityTypeShape EntityType="Model.Autore" Width="1.75" PointX="1.625" PointY="0.625" Height="1.787985026041667" />
+        <edmx:EntityTypeShape EntityType="Model.Libro" Width="1.75" PointX="4.5" PointY="0.625" Height="1.9802864583333339" />
+        <edmx:AssociationConnector Association="Model.AutoreLibro">
+          <edmx:ConnectorPoint PointX="3.375" PointY="1.615143229166667" />
+          <edmx:ConnectorPoint PointX="4.5" PointY="1.615143229166667" /></edmx:AssociationConnector></edmx:Diagram></edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
